@@ -1,7 +1,7 @@
-import { ActionRowBuilder, ButtonBuilder, EmbedBuilder, SlashCommandBuilder, SlashCommandChannelOption, SlashCommandStringOption, TextChannel } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, SlashCommandBuilder, SlashCommandChannelOption, SlashCommandStringOption, TextChannel } from 'discord.js';
 import { ICommand } from '../../typings/commands';
 import { IClaimRole } from '../../typings/claim_roles';
-
+import crypto from 'node:crypto';
 const cmd = new SlashCommandBuilder()
 .setName('send-roles-embed').setDescription('Send the roles embed')
 cmd.addStringOption(new SlashCommandStringOption().setName('title').setDescription('Set the name of the embed').setRequired(true));
@@ -53,10 +53,11 @@ export const SendRolesEmbedCommand: ICommand = {
 
         const button = new ButtonBuilder();
         button.setCustomId(clConf.embed.custom_id);
+        button.setStyle(ButtonStyle.Success)
         button.setLabel(btnTitleOpt);
 
-        const component = new ActionRowBuilder();
-        component.addComponents(button);
+        const row = new ActionRowBuilder<ButtonBuilder>();
+        row.addComponents(button);
 
         try {
             embed.setColor(`#${clConf.embed.color.replaceAll('#', '')}`);
@@ -67,12 +68,14 @@ export const SendRolesEmbedCommand: ICommand = {
 
 
         const resMsg = await channelOpt.send({
-            embeds: [embed]
+            embeds: [embed],
+            components: [row]
         })
 
         clConf.embed.channelId = resMsg.channel.id;
         clConf.embed.messageId = resMsg.id;
         config.data.claimRole.claims.push(clConf);
+        config.save();
         await interaction.editReply('Embed sent successfully!');
     },
 };

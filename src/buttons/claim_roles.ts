@@ -19,7 +19,7 @@ export const ClaimRoleButton: IButton = {
             return;
         }
 
-        interaction.deferReply({ ephemeral: true });
+        await interaction.deferReply({ ephemeral: true });
         const member = interaction.member! as GuildMember;
         if (claimRoleData.requiredRoles.length > 0 && !member.roles.cache.some((s) => claimRoleData.requiredRoles.includes(s.id))) {
             interaction.editReply("You don't have permission to execute this button!");
@@ -28,7 +28,7 @@ export const ClaimRoleButton: IButton = {
 
         const claimedRoles = member.roles.cache.filter((role) => claimRoleData.roles.includes(role.id));
         if (claimedRoles.size >= claimRoleData.roles.length) {
-            await interaction.editReply(config.data.claimRole.lang.alreadyClaimed.replaceAll('{role_list}', claimRoleData.roles.map((role) => `<@&${role}>`).join(', ')));
+            await interaction.editReply(config.data.claimRole.lang.alreadyClaimed.replaceAll('%role_list%', claimRoleData.roles.map((role) => `<@&${role}>`).join(', ')));
             return;
         }
 
@@ -39,6 +39,6 @@ export const ClaimRoleButton: IButton = {
             await member.roles.add(role);
         }
 
-        await interaction.editReply(config.data.claimRole.lang.claimed.replaceAll('{role_list}', claimRoleData.roles.map((role) => `<@&${role}>`).join(', ')));
+        await interaction.editReply(config.data.claimRole.lang.claimed.replaceAll('%role_list%', claimRoleData.roles.map((role) => `<@&${role}>`).join(', ')));
     },
 };
