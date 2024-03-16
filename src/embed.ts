@@ -2,13 +2,13 @@ import { Client, EmbedBuilder, TextChannel, APIEmbedField } from 'discord.js';
 import { Config } from './config';
 import { FiveMConfig } from './typings/config';
 
-export const updateMessages = async (client: Client<true>, config: Config) => {
+export const updateEmbeds = async (client: Client<true>, config: Config) => {
     for (const server of config.data.fivemData) {
-        await updateMessage(client, server);
+        await updateEmbed(client, server);
     }
 };
 
-export const updateMessage = async (client: Client<true>, config: FiveMConfig) => {
+export const updateEmbed = async (client: Client<true>, config: FiveMConfig) => {
     if (!config.embed.channelId || !config.embed.messageId) {
         console.log('Cannot find channel or message id for embed!');
         return;

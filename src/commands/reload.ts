@@ -1,5 +1,6 @@
 import { GuildMember, SlashCommandBuilder } from 'discord.js';
 import { ICommand } from '../typings/commands';
+import { updateEmbeds } from '../embed';
 
 export const ReloadCommand: ICommand = {
     adminOnly: true,
@@ -9,7 +10,7 @@ export const ReloadCommand: ICommand = {
 
         const startTime = new Date().getMilliseconds();
         config.load();
-
+        await updateEmbeds(client, config);
         const timeTook = new Date().getMilliseconds() - startTime;
         await interaction.editReply(`Reloaded config, took \`${timeTook > 1000 ? timeTook.toFixed(2) : timeTook}ms\``);
     },

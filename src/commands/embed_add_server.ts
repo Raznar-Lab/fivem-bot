@@ -2,11 +2,11 @@ import { SlashCommandBooleanOption, SlashCommandBuilder, SlashCommandStringOptio
 import { ICommand } from '../typings/commands';
 import { FiveMConfig } from '../typings/config';
 import { domainPattern, ipPattern } from '../constants';
-import { updateMessage } from '../embed';
+import { updateEmbed } from '../embed';
 
 const cmd = new SlashCommandBuilder().setName('embed-add-server').setDescription('Add server to the embed');
 cmd.addStringOption(new SlashCommandStringOption().setName('message_id').setDescription('The message embed ID of this channel (right click the embed to get the ID) - requires developer mode').setRequired(true));
-cmd.addStringOption(new SlashCommandStringOption().setName('host').setDescription('The server host').setRequired(true));
+cmd.addStringOption(new SlashCommandStringOption().setName('host').setDescription('The server host in URL').setRequired(true));
 cmd.addStringOption(new SlashCommandStringOption().setName('title').setDescription('Set the title of the field').setRequired(true));
 cmd.addStringOption(new SlashCommandStringOption().setName('description').setDescription('Set the description of the field').setRequired(true));
 cmd.addBooleanOption(new SlashCommandBooleanOption().setName('inline').setDescription('Keep the field inline or not?').setRequired(true));
@@ -39,13 +39,10 @@ export const EmbedAddServerCommand: ICommand = {
             return;
         }
 
-        let parsedHost = hostOpt;
-        if (ipPattern.test(hostOpt)) {
-            parsedHost = `http://${hostOpt}`;
-        } else if (domainPattern.test(hostOpt)) {
-            parsedHost = `https://${hostOpt}`;
-        } else {
-            await interaction.editReply('Invalid host! example: `abc.raznar.id` or `127.0.0.1:30120`');
+        try {
+            new URL(hostOpt);
+        } catch(e) {
+            await interaction.editReply('Invalid host! example: `https://abc.raznar.id` or `http://127.0.0.1:30120`');
             return;
         }
 
@@ -67,14 +64,14 @@ export const EmbedAddServerCommand: ICommand = {
         }
 
         const serverData = {
-            host: parsedHost,
+            host: hostOpt,
             title: titleOpt,
-            description: descOpt.replaceAll('%host%', parsedHost),
+            description: descOpt.replaceAll('%host%',  hostOpt),
             inline: inlineOpt,
         };
 
         config.data.fivemData[dataIndex].servers.push(serverData);
-        await updateMessage(client, config.data.fivemData[dataIndex]);
+        await updateEmbed(client, config.data.fivemData[dataIndex]);
         config.save();
         await interaction.editReply('The embed is updated successfully!');
     },

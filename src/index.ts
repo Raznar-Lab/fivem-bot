@@ -2,6 +2,7 @@ import { loadCommands, loadEvents, updateCommandsGuilds } from './commands';
 import { Config } from './config';
 import { Client, GatewayIntentBits } from 'discord.js';
 import { updateInterval } from './status';
+import { updateEmbeds } from './embed';
 
 const config = new Config();
 const client = new Client({
@@ -19,5 +20,6 @@ client.on('ready', async (cl) => {
     loadEvents(cl);
     const data = loadCommands(config);
     await updateCommandsGuilds(cl, data);
+    await updateEmbeds(cl, config);
     updateInterval(cl, config.data.main)
 })
