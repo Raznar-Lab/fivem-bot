@@ -38,7 +38,7 @@ fivemData:
         title: test
         description: "test: [host](http://127.0.0.1:30120)"
         inline: true
-main:
+fivemMain:
   host: http://127.0.0.1:30120
   name: Raznar ID
   maxPlayer: "2048"

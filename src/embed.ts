@@ -1,14 +1,14 @@
 import { Client, EmbedBuilder, TextChannel, APIEmbedField } from 'discord.js';
 import { Config } from './config';
-import { FiveMConfig } from './typings/config';
+import { IVConfig } from './typings/fivem';
 
-export const updateEmbeds = async (client: Client<true>, config: Config) => {
+export const updateServerEmbeds = async (client: Client<true>, config: Config) => {
     for (const server of config.data.fivemData) {
-        await updateEmbed(client, server);
+        await updateServerEmbed(client, server);
     }
 };
 
-export const updateEmbed = async (client: Client<true>, config: FiveMConfig) => {
+export const updateServerEmbed = async (client: Client<true>, config: IVConfig) => {
     if (!config.embed.channelId || !config.embed.messageId) {
         console.log('Cannot find channel or message id for embed!');
         return;
@@ -23,9 +23,9 @@ export const updateEmbed = async (client: Client<true>, config: FiveMConfig) => 
     await msg.edit({
         embeds: [embed],
     });
-}
+};
 
-export const newServerEmbed = (server: FiveMConfig) => {
+export const newServerEmbed = (server: IVConfig) => {
     const embed = new EmbedBuilder();
     embed.setTitle(server.embed.title);
     embed.setDescription(server.embed.description);
@@ -49,7 +49,7 @@ export const newServerEmbed = (server: FiveMConfig) => {
     try {
         embed.setColor(`#${server.embed.color.replaceAll('#', '')}`);
     } catch (e) {
-        server.embed.color = "#ffffff"
+        server.embed.color = '#ffffff';
         console.log('Failed to set color for embed!');
     }
 

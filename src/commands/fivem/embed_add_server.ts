@@ -1,8 +1,7 @@
 import { SlashCommandBooleanOption, SlashCommandBuilder, SlashCommandStringOption, TextBasedChannel } from 'discord.js';
-import { ICommand } from '../typings/commands';
-import { FiveMConfig } from '../typings/config';
-import { domainPattern, ipPattern } from '../constants';
-import { updateEmbed } from '../embed';
+import { ICommand } from '../../typings/commands';
+import { IVConfig } from '../../typings/fivem';
+import { updateServerEmbed } from '../../embed';
 
 const cmd = new SlashCommandBuilder().setName('embed-add-server').setDescription('Add server to the embed');
 cmd.addStringOption(new SlashCommandStringOption().setName('message_id').setDescription('The message embed ID of this channel (right click the embed to get the ID) - requires developer mode').setRequired(true));
@@ -23,7 +22,7 @@ export const EmbedAddServerCommand: ICommand = {
         const descOpt = interaction.options.getString('description', true);
         const inlineOpt = interaction.options.getBoolean('inline', true);
 
-        let data: FiveMConfig | undefined;
+        let data: IVConfig | undefined;
         let dataIndex = 0;
         for (let i = 0; i < config.data.fivemData.length; i++) {
             const fData = config.data.fivemData[i];
@@ -41,7 +40,7 @@ export const EmbedAddServerCommand: ICommand = {
 
         try {
             new URL(hostOpt);
-        } catch(e) {
+        } catch (e) {
             await interaction.editReply('Invalid host! example: `https://abc.raznar.id` or `http://127.0.0.1:30120`');
             return;
         }
@@ -66,12 +65,12 @@ export const EmbedAddServerCommand: ICommand = {
         const serverData = {
             host: hostOpt,
             title: titleOpt,
-            description: descOpt.replaceAll('%host%',  hostOpt),
+            description: descOpt.replaceAll('%host%', hostOpt),
             inline: inlineOpt,
         };
 
         config.data.fivemData[dataIndex].servers.push(serverData);
-        await updateEmbed(client, config.data.fivemData[dataIndex]);
+        await updateServerEmbed(client, config.data.fivemData[dataIndex]);
         config.save();
         await interaction.editReply('The embed is updated successfully!');
     },

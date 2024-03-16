@@ -1,7 +1,7 @@
-import { EmbedBuilder, SlashCommandBuilder, SlashCommandChannelOption, SlashCommandStringOption, TextChannel } from 'discord.js';
-import { ICommand } from '../typings/commands';
-import { newServerEmbed } from '../embed';
-import { FiveMConfig } from '../typings/config';
+import { SlashCommandBuilder, SlashCommandChannelOption, SlashCommandStringOption, TextChannel } from 'discord.js';
+import { ICommand } from '../../typings/commands';
+import { newServerEmbed } from '../../embed';
+import { IVConfig } from '../../typings/fivem';
 
 const cmd = new SlashCommandBuilder().setName('send-embed').setDescription('Send the servers embed');
 cmd.addStringOption(new SlashCommandStringOption().setName('title').setDescription('Set the name of the embed').setRequired(true));
@@ -34,7 +34,7 @@ export const SendEmbed: ICommand = {
             return;
         }
 
-        const fivemData: FiveMConfig = {
+        const fivemData: IVConfig = {
             embed: {
                 title: title,
                 description: description,

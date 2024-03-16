@@ -5,7 +5,7 @@ import { defaultConfig } from './constants';
 
 export class Config {
     public data: IConfig = defaultConfig;
-    private filePath: string = "";
+    private filePath: string = '';
     constructor() {}
 
     public load() {

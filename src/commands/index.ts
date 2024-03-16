@@ -3,20 +3,17 @@ import { REST, Client, Routes, RESTPostAPIChatInputApplicationCommandsJSONBody, 
 import { ICommand } from '../typings/commands';
 import { PingCommand } from './ping';
 import { ReloadCommand } from './reload';
-import { SetMainServer } from './set_main_server';
-import { SendEmbed } from './send_embed';
-import { EmbedAddServerCommand } from './embed_add_server';
+import { FiveMCommands } from './fivem';
+import { ClaimRolesCommand } from './claim_roles';
 
-const commands: ICommand[] = [PingCommand, ReloadCommand, SetMainServer, SendEmbed, EmbedAddServerCommand];
-let config: Config = new Config();
-
-export const loadEvents = (client: Client<true>) => {
+const commands: ICommand[] = [PingCommand, ReloadCommand, ...FiveMCommands, ...ClaimRolesCommand];
+export const loadCommandEvents = (client: Client<true>, config: Config) => {
     client.on('interactionCreate', async (interaction) => {
         if (interaction.isChatInputCommand()) {
             for (const cmd of commands) {
                 if (cmd.data.name == interaction.commandName) {
                     const member = interaction.member! as GuildMember;
-                    if (!member.roles.cache.some((s) => config.data.adminRoles.includes(s.id))) {
+                    if (config.data.adminRoles.length > 0 && !member.roles.cache.some((s) => config.data.adminRoles.includes(s.id))) {
                         console.log(`[${new Date().toISOString()}] [${interaction.user.username}] command /${interaction.commandName} on ${interaction.guild!.name} guild rejected`);
                         await interaction.editReply('You do not have permission to run this command!');
                         return;
@@ -50,8 +47,7 @@ export const updateCommandsGuilds = async (client: Client<true>, commandsJSON: R
     console.log(`Successfully reloaded ${total} application (/) commands.`);
 };
 
-export const loadCommands = (sConfig: Config): RESTPostAPIChatInputApplicationCommandsJSONBody[] => {
-    config = sConfig;
+export const loadCommands = (): RESTPostAPIChatInputApplicationCommandsJSONBody[] => {
 
     const commandsJSON: RESTPostAPIChatInputApplicationCommandsJSONBody[] = [];
     for (const cmd of commands) {
