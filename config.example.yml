@@ -1,0 +1,45 @@
+token: "YOUR_DISCORD_BOT_TOKEN"
+adminRoles:
+  - "926797470116241449"
+fivemData:
+  - embed:
+      title: test
+      description: test
+      thumbnail: https://cdn.discordapp.com/attachments/776806054394593321/1218531222574202940/worldwide.png?ex=660800a2&is=65f58ba2&hm=a7dffa1b6008819e280363b5b9af70ae804326c58cedf8123f8ce237e98fbebe&
+      color: "#FFF"
+      channelId: "1141673053546356747"
+      messageId: "1218548736268042380"
+    servers: []
+  - embed:
+      title: test
+      description: test
+      thumbnail: https://cdn.discordapp.com/attachments/776806054394593321/1218531222574202940/worldwide.png?ex=660800a2&is=65f58ba2&hm=a7dffa1b6008819e280363b5b9af70ae804326c58cedf8123f8ce237e98fbebe&
+      color: "#ffffff"
+      channelId: "1141673053546356747"
+      messageId: "1218549119111401562"
+    servers:
+      - host: http://127.0.0.1:30120
+        title: test
+        description: "test: [host](http://127.0.0.1:30120)"
+        inline: true
+      - host: http://127.0.0.1:30120
+        title: test
+        description: "test: [host](http://127.0.0.1:30120)"
+        inline: true
+      - host: http://127.0.0.1:30120
+        title: test
+        description: "test: [host](http://127.0.0.1:30120)"
+        inline: true
+      - host: http://127.0.0.1:30120
+        title: test
+        description: "test: [host](http://127.0.0.1:30120)"
+        inline: true
+      - host: http://127.0.0.1:30120
+        title: test
+        description: "test: [host](http://127.0.0.1:30120)"
+        inline: true
+main:
+  host: http://127.0.0.1:30120
+  name: Raznar ID
+  maxPlayer: "2048"
+  interval: 3
