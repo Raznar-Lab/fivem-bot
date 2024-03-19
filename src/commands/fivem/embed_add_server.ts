@@ -1,7 +1,7 @@
 import { SlashCommandBooleanOption, SlashCommandBuilder, SlashCommandStringOption, TextBasedChannel } from 'discord.js';
 import { ICommand } from '../../typings/commands';
 import { IVConfig } from '../../typings/fivem';
-import { updateServerEmbed } from '../../embed';
+import { newServerEmbed, updateEmbed } from '../../embed';
 
 const cmd = new SlashCommandBuilder().setName('embed-add-server').setDescription('Add server to the embed');
 cmd.addStringOption(new SlashCommandStringOption().setName('message_id').setDescription('The message embed ID of this channel (right click the embed to get the ID) - requires developer mode').setRequired(true));
@@ -22,17 +22,7 @@ export const EmbedAddServerCommand: ICommand = {
         const descOpt = interaction.options.getString('description', true);
         const inlineOpt = interaction.options.getBoolean('inline', true);
 
-        let data: IVConfig | undefined;
-        let dataIndex = 0;
-        for (let i = 0; i < config.data.fivemData.length; i++) {
-            const fData = config.data.fivemData[i];
-            if (fData.embed.messageId == msgOpt) {
-                data = fData;
-                dataIndex = i;
-                break;
-            }
-        }
-
+        const data = config.data.fivemData.find((v) => v.embed.messageId == msgOpt);
         if (!data) {
             await interaction.editReply('Message does not exist!');
             return;
@@ -69,8 +59,12 @@ export const EmbedAddServerCommand: ICommand = {
             inline: inlineOpt,
         };
 
-        config.data.fivemData[dataIndex].servers.push(serverData);
-        await updateServerEmbed(client, config.data.fivemData[dataIndex]);
+        data.servers.push(serverData);
+        const embed = newServerEmbed(data);
+        await updateEmbed(client, data.embed.channelId, data.embed.messageId, {
+            embeds: [embed],
+        });
+
         config.save();
         await interaction.editReply('The embed is updated successfully!');
     },

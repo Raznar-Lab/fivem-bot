@@ -1,4 +1,5 @@
 export interface IClaimRoleEmbed {
+    change: boolean;
     custom_id: string;
     title: string;
     color: string;

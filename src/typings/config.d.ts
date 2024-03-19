@@ -1,5 +1,5 @@
 import { IClaimRoleConfig } from './claim_roles';
-import { IVMainConfig } from './fivem';
+import { IVConfig, IVMainConfig } from './fivem';
 
 export interface IConfig {
     token: string;

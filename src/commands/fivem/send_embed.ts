@@ -36,6 +36,7 @@ export const SendEmbed: ICommand = {
 
         const fivemData: IVConfig = {
             embed: {
+                change: false,
                 title: title,
                 description: description,
                 thumbnail: thumbnail,

@@ -14,6 +14,7 @@ export interface IVServerConfig {
 
 export interface IVConfig {
     embed: {
+        change: boolean;
         messageId?: string;
         channelId?: string;
         thumbnail: string;

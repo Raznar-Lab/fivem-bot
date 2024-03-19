@@ -1,13 +1,13 @@
 import { SlashCommandBuilder, SlashCommandRoleOption, SlashCommandStringOption } from 'discord.js';
 import { ICommand } from '../../typings/commands';
 
-const cmd = new SlashCommandBuilder().setName('add-role-embed').setDescription('Add the role to the claim role embed!');
+const cmd = new SlashCommandBuilder().setName('remove-role-embed').setDescription('Remove the role to the claim role embed!');
 
 cmd.addStringOption(new SlashCommandStringOption().setName('message_id').setDescription('The message embed ID of this channel (right click the embed to get the ID) - requires developer mode').setRequired(true));
-cmd.addRoleOption(new SlashCommandRoleOption().setName('role').setDescription('The role to be added').setRequired(false));
-cmd.addRoleOption(new SlashCommandRoleOption().setName('required_role').setDescription('The required role to be added').setRequired(false));
+cmd.addRoleOption(new SlashCommandRoleOption().setName('role').setDescription('The role to be removed').setRequired(false));
+cmd.addRoleOption(new SlashCommandRoleOption().setName('required_role').setDescription('The required role to be removed').setRequired(false));
 
-export const AddRoleEmbedCommand: ICommand = {
+export const RemoveRoleEmbedCommand: ICommand = {
     adminOnly: true,
     data: cmd,
     execute: async (config, client, interaction) => {
@@ -28,13 +28,13 @@ export const AddRoleEmbedCommand: ICommand = {
         }
 
         let changes = 0;
-        if (roleOpt && !claimRoleConf.roles.includes(roleOpt.id)) {
+        if (roleOpt && claimRoleConf.roles.includes(roleOpt.id)) {
+            claimRoleConf.roles = claimRoleConf.roles.filter((v) => v != roleOpt.id);
             changes++;
-            claimRoleConf.roles.push(roleOpt.id);
         }
-        if (requiredRoleOpt && !claimRoleConf.requiredRoles.includes(requiredRoleOpt.id)) {
+        if (requiredRoleOpt && claimRoleConf.requiredRoles.includes(requiredRoleOpt.id)) {
+            claimRoleConf.requiredRoles = claimRoleConf.requiredRoles.filter((v) => v != requiredRoleOpt.id);
             changes++;
-            claimRoleConf.requiredRoles.push(requiredRoleOpt.id);
         }
 
         config.save();

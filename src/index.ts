@@ -2,7 +2,7 @@ import { loadCommands, loadCommandEvents, updateCommandsGuilds } from './command
 import { Config } from './config';
 import { Client, GatewayIntentBits } from 'discord.js';
 import { updateInterval } from './status';
-import { updateServerEmbeds } from './embed';
+import { updateClaimRoleEmbeds, updateServerEmbeds } from './embed';
 import { loadButtonEvents } from './buttons';
 
 const config = new Config();
@@ -23,5 +23,7 @@ client.on('ready', async (cl) => {
     const data = loadCommands();
     await updateCommandsGuilds(cl, data);
     await updateServerEmbeds(cl, config);
+    await updateClaimRoleEmbeds(cl, config);
+    config.save();
     updateInterval(cl, config.data.fivemMain);
 });
